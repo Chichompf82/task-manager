@@ -1,0 +1,20 @@
+# node modules (MUY importante)
+node_modules/
+
+# variables sensibles
+.env
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# build frontend
+dist/
+
+# coverage
+coverage/
