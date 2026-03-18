@@ -1,10 +1,20 @@
-# Task Manager Full Stack
+# 📝 Task Manager Full Stack
 
-Aplicación **full-stack de gestión de tareas** desarrollada con JavaScript utilizando Node.js, Express y MongoDB.
+🚀 API REST + Frontend para gestión de tareas con autenticación JWT
 
-El objetivo del proyecto es construir una API REST completa con autenticación de usuarios y operaciones CRUD para tareas, simulando una aplicación real utilizada en entornos profesionales.
+---
 
-Este proyecto forma parte de mi portfolio como desarrollador Full Stack.
+# 📌 Estado del proyecto
+
+✔ Backend completo  
+✔ API funcional y testeada  
+🔄 Frontend en desarrollo (próximamente con Vue.js) 
+
+---
+
+# 📸 Preview
+
+(agregar screenshots)
 
 ---
 
@@ -34,6 +44,14 @@ Herramientas
 ---
 
 # 📌 Funcionalidades
+
+## ⭐ Features destacadas
+
+- Autenticación segura con JWT
+- Encriptación de contraseñas con bcrypt
+- API REST estructurada
+- Middleware de autorización
+- Filtros, búsqueda y paginación en tareas
 
 Autenticación de usuarios
 
@@ -123,9 +141,9 @@ Clonar el repositorio
 
 git clone https://github.com/Chichompf82/task-manager.git
 
-Entrar en la carpeta
+Entrar al backend
 
-cd task-manager
+cd task-manager/backend
 
 Instalar dependencias
 
