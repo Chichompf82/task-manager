@@ -1,3 +1,5 @@
+
+
 // Importa el framework Express
 const express = require("express");
 
@@ -6,6 +8,9 @@ const dotenv = require("dotenv");
 
 // Importa la función que creamos para conectarnos a MongoDB
 const connectDB = require("./config/database");
+
+// Habilitar CORS
+const cors = require("cors");
 
 //Importa rutas
 const authRoutes = require("./routes/auth");
@@ -22,6 +27,10 @@ const app = express();
 
 // Middleware que permite recibir datos en formato JSON en las peticiones
 app.use(express.json());
+
+app.use(cors({
+  origin: "http://localhost:5173"
+}));
 
 //rutas
 app.use("/api/auth",authRoutes);
