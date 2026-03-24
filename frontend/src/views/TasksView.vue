@@ -3,6 +3,15 @@ p<template>
         <h1>Mis taresa</h1>
 
         <button @click="logout">Cerrar sesión</button>
+        <br>
+        <br>
+
+        <!-- FORMULARIO -->
+        <form @submit.prevent="createTask">
+            <input v-model="newTask" placeholder="Nueva tarea..." />
+            <button type="submit">Agregar</button>
+        </form>
+        <br>
 
         <ul>
             <li v-for="task in tasks" :key="task.id">
@@ -22,6 +31,7 @@ import { useRouter } from "vue-router";
 
 const tasks = ref([]);
 const router = useRouter();
+const newTask = ref("");
 
 const fetchTasks = async () => {
     try {
@@ -49,8 +59,39 @@ const fetchTasks = async () => {
     }
 };
 
+// Crear tarea
+const createTask = async () => {
+    try {
+        const token = localStorage.getItem("token");
+
+        const res = await fetch("http://localhost:3000/api/tasks", {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: token
+            },
+            body: JSON.stringify({
+                title: newTask.value
+            })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error();
+
+        //agregar tarea al listado sin recargar
+        tasks.value.unshift(data);
+
+        //limpiar imput
+        newTask.value = "";
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 const logout = () => {
-    localStorage.removeItem("tpken");
+    localStorage.removeItem("token");
     router.push("/login");
 };
 
