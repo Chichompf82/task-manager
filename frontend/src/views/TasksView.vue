@@ -6,17 +6,28 @@ p<template>
         <br>
         <br>
 
-        <!-- FORMULARIO -->
+        <!-- Crear tarea -->
         <form @submit.prevent="createTask">
             <input v-model="newTask" placeholder="Nueva tarea..." />
             <button type="submit">Agregar</button>
         </form>
         <br>
 
+        <!-- Listar tareas -->
         <ul>
             <li v-for="task in tasks" :key="task.id">
-                {{ task.title }} - 
+                {{ task.title }}
                 <strong>{{ task.completed ? "✔" : "❌" }}</strong>
+
+                <!-- Completar tarea -->
+                <button @click="toggleTask(task)">
+                    {{ task.completed ? "Desmarcar" : "Completar" }}
+                </button>
+
+                <!-- Eliminar -->
+                <button @click="deleteTask(task._id)">
+                    Eliminar
+                </button>
             </li>
         </ul>
 
@@ -33,6 +44,7 @@ const tasks = ref([]);
 const router = useRouter();
 const newTask = ref("");
 
+//Obtener tareas
 const fetchTasks = async () => {
     try {
 
@@ -90,13 +102,69 @@ const createTask = async () => {
     }
 };
 
+//Completar / desmarcar
+const toggleTask = async (task) => {
+    try{
+        const token = localStorage.getItem("token");
+
+        const res = await fetch(`http://localhost:3000/api/tasks/${task._id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: token
+            },
+            body: JSON.stringify({
+                completed: !task.completed
+            })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error();
+
+        task.completed = data.completed;
+
+    }catch (error) {
+        console.error(error);
+    }
+};
+
+//Eliminar tarea
+const deleteTask = async (id) => {
+    try{
+        const token = localStorage.getItem("token");
+
+        const res = await fetch(`http://localhost:3000/api/tasks/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: token
+            }
+        });
+
+        if (!res.ok) throw new Error();
+
+        tasks.value = tasks.value.filter(task => task._id !== id);
+
+    }catch (error) {
+        console.error(error);
+    }
+};
+
+//Logout
 const logout = () => {
     localStorage.removeItem("token");
     router.push("/login");
 };
 
-// Se ejecuta cuando carga la vista
+// Protección y carga inicial
 onMounted(() => {
+    const token = localStorage.getItem("token")
+
+    if (!token) {
+        router.push("/login");
+        return;
+    }
+
     fetchTasks();
 });
 </script>

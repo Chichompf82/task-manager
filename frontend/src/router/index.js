@@ -9,6 +9,7 @@ const routes = [
   { path: "/login", component: LoginView },
   { path: "/register", component: RegisterView},
   { path: "/tasks", component: TasksView, meta: { requiresAuth: true}},
+  { path: "/:pathMatch(.*)*", redirect: "/login"}
 ];
 
 const router = createRouter({
