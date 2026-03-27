@@ -26,9 +26,20 @@ const app = express();
 // Middleware que permite recibir datos en formato JSON en las peticiones
 app.use(express.json());
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://taskmanagerproyect.netlify.app",
+];
+
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://taskmanagerproyect.netlify.app"],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("No permitido por CORS"));
+      }
+    },
   })
 );
 
