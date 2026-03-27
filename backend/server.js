@@ -1,5 +1,3 @@
-
-
 // Importa el framework Express
 const express = require("express");
 
@@ -28,12 +26,14 @@ const app = express();
 // Middleware que permite recibir datos en formato JSON en las peticiones
 app.use(express.json());
 
-app.use(cors({
-  origin: "http://localhost:5173"
-}));
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://taskmanagerproyect.netlify.app"],
+  })
+);
 
 //rutas
-app.use("/api/auth",authRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
 
 // Define el puerto donde se ejecutará el servidor
@@ -45,10 +45,10 @@ const PORT = process.env.PORT || 3000;
 // Cuando alguien entra a http://localhost:3000
 // el servidor responde con este mensaje
 app.get("/", (req, res) => {
-    res.send("API Task Manager funcionando 🚀");
+  res.send("API Task Manager funcionando 🚀");
 });
 
 // Inicia el servidor y lo pone a escuchar en el puerto definido
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
