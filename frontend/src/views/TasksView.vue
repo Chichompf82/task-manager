@@ -53,8 +53,8 @@ const fetchTasks = async () => {
     // Obtener token guardado
     const token = localStorage.getItem('token')
 
-    /* const res = await fetch('http://localhost:3000/api/tasks', { */
-    const res = await fetch('https://task-manager-lux2.onrender.com/api/tasks', {
+    const res = await fetch('http://localhost:3000/api/tasks', {
+      /* const res = await fetch('https://task-manager-lux2.onrender.com/api/tasks', { */
       headers: {
         Authorization: token,
       },
@@ -77,8 +77,8 @@ const createTask = async () => {
   try {
     const token = localStorage.getItem('token')
 
-    /* const res = await fetch('http://localhost:3000/api/tasks', { */
-    const res = await fetch('https://task-manager-lux2.onrender.com/api/tasks', {
+    const res = await fetch('http://localhost:3000/api/tasks', {
+      /* const res = await fetch('https://task-manager-lux2.onrender.com/api/tasks', { */
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -108,8 +108,8 @@ const toggleTask = async (task) => {
   try {
     const token = localStorage.getItem('token')
 
-    /* const res = await fetch(`http://localhost:3000/api/tasks/${task._id}`, { */
-    const res = await fetch(`https://task-manager-lux2.onrender.com/api/tasks/${task._id}`, {
+    const res = await fetch(`http://localhost:3000/api/tasks/${task._id}`, {
+      /* const res = await fetch(`https://task-manager-lux2.onrender.com/api/tasks/${task._id}`, { */
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -135,8 +135,8 @@ const deleteTask = async (id) => {
   try {
     const token = localStorage.getItem('token')
 
-    /* const res = await fetch(`http://localhost:3000/api/tasks/${id}`, { */
-    const res = await fetch(`https://task-manager-lux2.onrender.com/api/tasks/${id}`, {
+    const res = await fetch(`http://localhost:3000/api/tasks/${id}`, {
+      /* const res = await fetch(`https://task-manager-lux2.onrender.com/api/tasks/${id}`, { */
       method: 'DELETE',
       headers: {
         Authorization: token,

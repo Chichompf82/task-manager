@@ -4,19 +4,25 @@ const mongoose = require("mongoose");
 // Creamos el esquema del usuario
 // Esto define cómo se verá el documento en MongoDB
 const UserSchema = new mongoose.Schema({
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        require: true
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    require: true,
+  },
+  //Rol del usuario
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 // Creamos el modelo User basado en el schema

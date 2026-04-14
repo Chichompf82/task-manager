@@ -3,19 +3,43 @@ const express = require("express");
 
 //Importamos el modelo Task
 const Task = require("../models/Task");
+const AppError = require("../utils/AppError");
+
+//Importamos validasiones y meddleware
+const { taskValidation } = require("../validators/taskValidators");
+const validate = require("../middleware/validateMiddleware");
 
 //Importamos el meddleware de autenticcacion
-const authMiddlewere = require("../middleware/authMiddleware");
+const authMiddleware = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware");
 
 // Creamos el router de Express
 const router = express.Router();
+
+// =================================================================
+// RUTA SOLO PARA ADMIN: VER TODAS LAS TAREAS DE TODOS LOS USUARIOS
+// =================================================================
+router.get(
+  "/admin/all",
+  authMiddleware,
+  adminMiddleware,
+  async (req, res, next) => {
+    try {
+      // un admin puede ver las tareas de todos
+      const tasks = await Task.find().populate("user", "email role");
+      res.json(tasks);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 // ==============================
 // OBTENER TODAS LAS TAREAS
 // ==============================
 
 // Devuelve todas las tareas del usuario logueado
-router.get("/", authMiddlewere, async (req, res) => {
+router.get("/", authMiddleware, async (req, res, next) => {
   try {
     //Buscamos tareas de usuario logueado
     const tasks = await Task.find({ user: req.user.id });
@@ -23,9 +47,7 @@ router.get("/", authMiddlewere, async (req, res) => {
     //Devolvemos tareas en JSON
     res.json(tasks);
   } catch (error) {
-    res.status(500).json({
-      error: "Error al obtener tareas",
-    });
+    next(error);
   }
 });
 
@@ -33,53 +55,54 @@ router.get("/", authMiddlewere, async (req, res) => {
 // CREAR TAREA
 // ==============================
 
-router.post("/", authMiddlewere, async (req, res) => {
-  try {
-    //Obtenemos el titulo desde el body
-    const { title } = req.body;
+router.post(
+  "/",
+  authMiddleware,
+  taskValidation,
+  validate,
+  async (req, res, next) => {
+    try {
+      //Obtenemos el titulo desde el body
+      const { title } = req.body;
 
-    //Creamos una nueva tarea
-    const task = new Task({
-      //Titulo enviado por el usuario
-      title,
+      //Creamos una nueva tarea
+      const task = new Task({
+        //Titulo enviado por el usuario
+        title,
 
-      //Asociamo la tarea al usuario logueado
-      user: req.user.id,
-    });
+        //Asociamo la tarea al usuario logueado
+        user: req.user.id,
+      });
 
-    //Guardamos la tarea en MongoDB
-    await task.save();
+      //Guardamos la tarea en MongoDB
+      await task.save();
 
-    //Devolvemos la tarea creada
-    res.status(201).json(task);
-  } catch (error) {
-    res.status(500).json({
-      error: "Error al crear tarea",
-    });
+      //Devolvemos la tarea creada
+      res.status(201).json(task);
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 // ==============================
 // ACTUALIZAR TAREA
 // ==============================
 
-router.put("/:id", authMiddlewere, async (req, res) => {
+// prettier-ignore
+router.put("/:id", authMiddleware, taskValidation, validate, async (req, res, next) => {
   try {
     // Buscaos la tarea por ID
     const task = await Task.findById(req.params.id);
 
     //Si no existe
     if (!task) {
-      return res.status(404).json({
-        message: "Tarea no encontrada",
-      });
+      throw new AppError("Tarea no encontrada", 404);
     }
 
     // Verificamos que la tarea pertenesca al usuario
     if (task.user.toString() !== req.user.id) {
-      return res.status(403).json({
-        message: "No autorizado",
-      });
+      throw new AppError("No autorizado", 403);
     }
 
     // Actualizar el estado de completado
@@ -93,9 +116,7 @@ router.put("/:id", authMiddlewere, async (req, res) => {
 
     res.json(task);
   } catch (error) {
-    res.status(500).json({
-      error: "Error al actualizar tarea",
-    });
+    next(error);
   }
 });
 
@@ -103,16 +124,14 @@ router.put("/:id", authMiddlewere, async (req, res) => {
 // ELIMINAR TAREA
 // ==============================
 
-router.delete("/:id", authMiddlewere, async (req, res) => {
+router.delete("/:id", authMiddleware, async (req, res, next) => {
   try {
     // Buscamos la tarea
     const task = await Task.findById(req.params.id);
 
     //Si no existe
     if (!task) {
-      return res.status(404).json({
-        message: "Tarea no encontrada",
-      });
+      throw new AppError("Tarea no encontrada", 404);
     }
 
     // Eliminamos la tarea
@@ -122,9 +141,7 @@ router.delete("/:id", authMiddlewere, async (req, res) => {
       message: "Tarea eliminada correctamente",
     });
   } catch (error) {
-    res.status(500).json({
-      error: "Error al eliminar tarea",
-    });
+    next(error);
   }
 });
 
@@ -132,7 +149,7 @@ router.delete("/:id", authMiddlewere, async (req, res) => {
 // OBTENER TAREAS (con filtros)
 // ==============================
 
-router.get("/", authMiddlewere, async (req, res) => {
+router.get("/", authMiddleware, async (req, res, next) => {
   try {
     // Página actual (default = 1)
     const page = parseInt(req.quiry.page) || 1;
@@ -163,9 +180,7 @@ router.get("/", authMiddlewere, async (req, res) => {
 
     res.json(tasks);
   } catch (erro) {
-    res._construct.status(500).json({
-      error: "Error al obtener tarea",
-    });
+    next(error);
   }
 });
 

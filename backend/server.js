@@ -4,15 +4,16 @@ const express = require("express");
 // Importa la librería dotenv
 const dotenv = require("dotenv");
 
-// Importa la función que creamos para conectarnos a MongoDB
-const connectDB = require("./config/database");
-
 // Habilitar CORS
 const cors = require("cors");
 
+// Importa la función que creamos para conectarnos a MongoDB
+const connectDB = require("./config/database");
 //Importa rutas
 const authRoutes = require("./routes/auth");
 const taskRoutes = require("./routes/tasks");
+//Importar middleware de errores
+const errorMiddleware = require("./middleware/errorMiddleware");
 
 // Carga las variables del archivo .env en process.env
 dotenv.config();
@@ -46,6 +47,7 @@ app.use(
 //rutas
 app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
+app.use(errorMiddleware);
 
 // Define el puerto donde se ejecutará el servidor
 // Primero intenta leer el puerto desde el archivo .env
