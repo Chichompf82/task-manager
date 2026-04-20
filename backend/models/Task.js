@@ -8,9 +8,14 @@ const taskSchema = new mongoose.Schema(
       type: String,
       require: true,
     },
-    completed: {
-      type: Boolean,
-      default: false,
+    description: {
+      type: String,
+      default: "",
+    },
+    status: {
+      type: String,
+      enum: ["pendiente", "en-proceso", "completada"],
+      default: pendiente,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

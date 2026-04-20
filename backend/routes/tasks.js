@@ -17,7 +17,7 @@ const adminMiddleware = require("../middleware/adminMiddleware");
 const router = express.Router();
 
 // =================================================================
-// RUTA SOLO PARA ADMIN: VER TODAS LAS TAREAS DE TODOS LOS USUARIOS
+// RUTA SOLO PARA ADMIN: VER TAREAS DE TODOS LOS USUARIOS
 // =================================================================
 router.get(
   "/admin/all",
@@ -35,14 +35,26 @@ router.get(
 );
 
 // ==============================
-// OBTENER TODAS LAS TAREAS
+// OBTENER TAREAS DEL USUARIO
 // ==============================
 
 // Devuelve todas las tareas del usuario logueado
 router.get("/", authMiddleware, async (req, res, next) => {
   try {
+    const page = parseInst(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 50;
+    const search = req.query.search || "";
+    const skip = (page - 1) * limit;
+
+    const filter = {
+      user: req.user.id,
+      title: { $regex: search, $options: "i" },
+    };
     //Buscamos tareas de usuario logueado
-    const tasks = await Task.find({ user: req.user.id });
+    const tasks = await Task.find({ filter })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
     //Devolvemos tareas en JSON
     res.json(tasks);
@@ -62,14 +74,14 @@ router.post(
   validate,
   async (req, res, next) => {
     try {
-      //Obtenemos el titulo desde el body
-      const { title } = req.body;
+      //Obtenemos el titulo, descripción y estado desde el body
+      const { title, description, status } = req.body;
 
       //Creamos una nueva tarea
       const task = new Task({
-        //Titulo enviado por el usuario
         title,
-
+        description,
+        status: status || "pendiente",
         //Asociamo la tarea al usuario logueado
         user: req.user.id,
       });
@@ -105,11 +117,12 @@ router.put("/:id", authMiddleware, taskValidation, validate, async (req, res, ne
       throw new AppError("No autorizado", 403);
     }
 
-    // Actualizar el estado de completado
-    task.completed = req.body.completed ?? task.completed;
-
     // Actualizar el título
     task.title = req.body.title ?? task.title;
+    // Actualizar la descripción
+    task.description = req.body.description ?? task.description;
+    // Actualizamos el estado
+    task.status = req.body.status ?? task.status;
 
     //Guardar cambios
     await task.save();
@@ -134,6 +147,10 @@ router.delete("/:id", authMiddleware, async (req, res, next) => {
       throw new AppError("Tarea no encontrada", 404);
     }
 
+    if (task.user.toString() !== req.params.id) {
+      throw new AppError("No Autorizado", 403);
+    }
+
     // Eliminamos la tarea
     await task.deleteOne();
 
@@ -141,45 +158,6 @@ router.delete("/:id", authMiddleware, async (req, res, next) => {
       message: "Tarea eliminada correctamente",
     });
   } catch (error) {
-    next(error);
-  }
-});
-
-// ==============================
-// OBTENER TAREAS (con filtros)
-// ==============================
-
-router.get("/", authMiddleware, async (req, res, next) => {
-  try {
-    // Página actual (default = 1)
-    const page = parseInt(req.quiry.page) || 1;
-
-    // Cantidad por página (default = 5)
-    const limit = parseInt(req.query.limit) || 5;
-
-    // Texto de búsqueda
-    const search = req.query.search || "";
-
-    // Campo de ordenamiento
-    const sort = req.query.sort || "createdAt";
-
-    // Saltar documentos para paginación
-    const skip = (page - 1) * limit;
-
-    // Crear filtro de búsqueda
-    const filtar = {
-      user: req.user.id,
-      title: { $regex: search, $options: "i" },
-    };
-
-    // Buscar tareas
-    const tasks = await Task.find(filter)
-      .sort({ [sort]: -1 })
-      .skip(skip)
-      .limit(limit);
-
-    res.json(tasks);
-  } catch (erro) {
     next(error);
   }
 });
