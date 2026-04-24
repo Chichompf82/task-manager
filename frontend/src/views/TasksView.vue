@@ -225,7 +225,8 @@ const token = () => localStorage.getItem('token')
 const fetchTasks = async () => {
   loading.value = true
   try {
-    const res = await fetch('http://localhost:3000/api/tasks', {
+    /* const res = await fetch('http://localhost:3000/api/tasks', { */
+    const res = await fetch('https://task-manager-lux2.onrender.com/api/task', {
       headers: { Authorization: `Bearer ${token()}` },
     })
     const data = await res.json()
@@ -273,8 +274,10 @@ const saveTask = async () => {
 
   try {
     const url = editingTask.value
-      ? `http://localhost:3000/api/tasks/${editingTask.value._id}`
-      : 'http://localhost:3000/api/tasks'
+      ? /* ? `http://localhost:3000/api/tasks/${editingTask.value._id}` */
+        `https://task-manager-lux2.onrender.com/api/task/${editingTask.value._id}`
+      : /* : 'http://localhost:3000/api/tasks' */
+        'https://task-manager-lux2.onrender.com/api/task'
 
     const method = editingTask.value ? 'PUT' : 'POST'
 
@@ -325,10 +328,14 @@ const saveTask = async () => {
 const deleteTask = async () => {
   deleting.value = true
   try {
-    const res = await fetch(`http://localhost:3000/api/tasks/${taskToDelete.value._id}`, {
-      method: 'DELETE',
-      headers: { Authorization: `Bearer ${token()}` },
-    })
+    /* const res = await fetch(`http://localhost:3000/api/tasks/${taskToDelete.value._id}`, { */
+    const res = await fetch(
+      `https://task-manager-lux2.onrender.com/api/task/${taskToDelete.value._id}`,
+      {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token()}` },
+      },
+    )
 
     if (!res.ok) throw new Error()
 
@@ -359,7 +366,8 @@ const onDragChange = async (evt, newStatus) => {
   if (index !== -1) tasks.value[index].status = newStatus
 
   try {
-    const res = await fetch(`http://localhost:3000/api/tasks/${task._id}`, {
+    /* const res = await fetch(`http://localhost:3000/api/tasks/${task._id}`, { */
+    const res = await fetch(`https://task-manager-lux2.onrender.com/api/task/${task._id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
