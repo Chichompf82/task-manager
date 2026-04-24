@@ -41,7 +41,7 @@ router.get(
 // Devuelve todas las tareas del usuario logueado
 router.get("/", authMiddleware, async (req, res, next) => {
   try {
-    const page = parseInst(req.query.page) || 1;
+    const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 50;
     const search = req.query.search || "";
     const skip = (page - 1) * limit;
@@ -50,8 +50,9 @@ router.get("/", authMiddleware, async (req, res, next) => {
       user: req.user.id,
       title: { $regex: search, $options: "i" },
     };
+
     //Buscamos tareas de usuario logueado
-    const tasks = await Task.find({ filter })
+    const tasks = await Task.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -147,8 +148,8 @@ router.delete("/:id", authMiddleware, async (req, res, next) => {
       throw new AppError("Tarea no encontrada", 404);
     }
 
-    if (task.user.toString() !== req.params.id) {
-      throw new AppError("No Autorizado", 403);
+    if (task.user.toString() !== req.user.id) {
+      throw new AppError("No autorizado", 403);
     }
 
     // Eliminamos la tarea
