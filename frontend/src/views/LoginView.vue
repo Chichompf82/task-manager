@@ -7,7 +7,7 @@
             <v-card rounded="lg" elevation="3" class="pa-4">
               <v-card-title class="text-center pt-6 pb-2">
                 <v-icon size="40" color="primary" class="mb-2">mdi-check-circle</v-icon>
-                <div class="text-h5 font-weight-bold">Task Manager</div>
+                <div class="text-h5 font-weight-bold">Trako</div>
               </v-card-title>
 
               <v-card-subtitle class="text-center pb-4">
@@ -89,8 +89,8 @@ const showPassword = ref(false)
 const loading = ref(false)
 const errorMessage = ref('')
 const errors = ref({ email: '', password: '' })
-/* const url = 'http://localhost:3000/api/auth/' // url Local */
-const url = 'https://task-manager-lux2.onrender.com/api/auth/' // url web
+const url = 'http://localhost:3000/api/auth/' // url Local
+/* const url = 'https://task-manager-lux2.onrender.com/api/auth/' // url web */
 const router = useRouter()
 
 const handleLogin = async () => {

@@ -1,9 +1,9 @@
-# 📝 Task Manager Full Stack
+# 📝 Trako
 
 Aplicación full-stack de gestión de tareas desarrollada con Vue 3, Node.js, Express y MongoDB.
 El objetivo del proyecto es construir una API REST completa con autenticación de usuarios, roles, validaciones profesionales y un tablero Kanban interactivo con drag & drop.
 Este proyecto forma parte de mi portfolio como desarrollador Full Stack.
-🌐 Demo en vivo: https://taskmanagerproyect.netlify.app
+🌐 Demo en vivo: [https://trakotask.netlify.app](https://trakotask.netlify.app)
 
 ---
 

@@ -29,7 +29,7 @@ app.use(express.json());
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://taskmanagerproyect.netlify.app",
+  "https://trakotask.netlify.app",
 ];
 
 app.use(
