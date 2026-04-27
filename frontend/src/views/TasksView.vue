@@ -189,8 +189,8 @@ const dialog = ref(false)
 const deleteDialog = ref(false)
 const editingTask = ref(null)
 const taskToDelete = ref(null)
-const url = 'http://localhost:3000/api/tasks/' // url local
-/* const url = 'https://task-manager-lux2.onrender.com/api/tasks/' // url web */
+/* const url = 'http://localhost:3000/api/tasks/' // url local */
+const url = 'https://task-manager-lux2.onrender.com/api/tasks/' // url web
 
 const form = ref({ title: '', description: '', status: 'pendiente' })
 const formErrors = ref({ title: '' })
