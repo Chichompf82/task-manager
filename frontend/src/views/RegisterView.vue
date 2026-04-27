@@ -86,8 +86,8 @@ const showPassword = ref(false)
 const loading = ref(false)
 const errorMessage = ref('')
 const errors = ref({ email: '', password: '' })
-const url = 'http://localhost:3000/api/auth/' // url local
-/* const url = 'https://task-manager-lux2.onrender.com/api/auth/' */ // url web
+/* const url = 'http://localhost:3000/api/auth/' // url local */
+const url = 'https://task-manager-lux2.onrender.com/api/auth/' // url web
 
 const router = useRouter()
 

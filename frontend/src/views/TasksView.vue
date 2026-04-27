@@ -189,8 +189,8 @@ const dialog = ref(false)
 const deleteDialog = ref(false)
 const editingTask = ref(null)
 const taskToDelete = ref(null)
-const url = 'http://localhost:3000/api/tasks/' // url local
-/* const url = 'https://task-manager-lux2.onrender.com/api/tasks/' */ // url web
+/* const url = 'http://localhost:3000/api/tasks/' // url local */
+const url = 'https://task-manager-lux2.onrender.com/api/tasks/' // url web
 
 const form = ref({ title: '', description: '', status: 'pendiente' })
 const formErrors = ref({ title: '' })
@@ -274,11 +274,11 @@ const saveTask = async () => {
   saving.value = true
 
   try {
-    const url = editingTask.value ? url + `${editingTask.value._id}` : url
+    const urlPutPost = editingTask.value ? url + `${editingTask.value._id}` : url
 
     const method = editingTask.value ? 'PUT' : 'POST'
 
-    const res = await fetch(url, {
+    const res = await fetch(urlPutPost, {
       method,
       headers: {
         'Content-Type': 'application/json',
