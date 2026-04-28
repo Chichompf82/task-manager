@@ -6,7 +6,9 @@
           <v-col cols="12" sm="8" md="5" lg="4">
             <v-card rounded="lg" elevation="3" class="pa-4">
               <v-card-title class="text-center pt-6 pb-2">
-                <v-icon size="40" color="primary" class="mb-2">mdi-account-plus</v-icon>
+                <div class="d-flex justify-center mb-3 ml-8">
+                  <img src="../assets/logo.svg" alt="Trako" height="40" />
+                </div>
                 <div class="text-h5 font-weight-bold">Crear cuenta</div>
               </v-card-title>
               <v-card-subtitle class="text-center pb-4">

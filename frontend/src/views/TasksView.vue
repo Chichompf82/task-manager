@@ -2,10 +2,14 @@
   <v-app>
     <v-main class="bg-grey-lighten-3">
       <!-- NAVBAR -->
-      <v-app-bar color="primary" elevation="2">
+      <v-app-bar color="white" elevation="2">
         <v-app-bar-title>
-          <v-icon class="mr-2">mdi-check-circle</v-icon>
-          Trako
+          <img
+            src="../assets/logo.svg"
+            alt="Trako"
+            height="45"
+            style="display: block; margin-top: 6px"
+          />
         </v-app-bar-title>
         <v-spacer />
         <v-btn variant="text" color="white" prepend-icon="mdi-logout" @click="logout">
