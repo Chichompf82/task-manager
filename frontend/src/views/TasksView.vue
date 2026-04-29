@@ -2,7 +2,7 @@
   <v-app>
     <v-main class="bg-grey-lighten-3">
       <!-- NAVBAR -->
-      <v-app-bar color="white" elevation="2">
+      <v-app-bar color="grey-lighten-5" elevation="2">
         <v-app-bar-title>
           <img
             src="../assets/logo.svg"
